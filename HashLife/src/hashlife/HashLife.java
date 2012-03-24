@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package game_of_life;
+package hashlife;
 
 /**
  *
- * @author 
+ * @author kviiri
  */
-public class Game_of_life {
+public class HashLife {
 
     /**
      * @param args the command line arguments
