@@ -21,7 +21,7 @@ public class ReadFile {
      * @return Työyksikkö, jossa tieto askelten lukumäärästä ja alkuasetelmasta
      * @throws IOException Tiedoston lukeminen epäonnistuu, tiedostoa ei ole olemassa tai se on hakemisto
      */
-    public static LifeJob fileToBooleanArray(String filename) throws IOException {
+    public static LifeJob fileToLifeJob(String filename) throws IOException {
 
         // Luodaan syötetiedostolle kahva ja varmistetaan sen lukukelpoisuus
         File inputFile = new File(filename);        

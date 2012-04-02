@@ -31,7 +31,7 @@ public class ReadFileTest {
     @Before
     public void setUp() throws Exception {
         filename = "life_800_10000.txt";
-        resultLifeJob = ReadFile.fileToBooleanArray(filename);
+        resultLifeJob = ReadFile.fileToLifeJob(filename);
         long stop = System.currentTimeMillis(); 
     }
     
@@ -55,7 +55,7 @@ public class ReadFileTest {
     public void lukeminenOnNopea() throws Exception{
         int limit_millis = 500;
         long start = System.currentTimeMillis();
-        resultLifeJob = ReadFile.fileToBooleanArray(filename);
+        resultLifeJob = ReadFile.fileToLifeJob(filename);
         long stop = System.currentTimeMillis();
         System.out.println("Tiedosto luettiin ajassa: " + (stop-start) + "ms");
         assertTrue(stop-start < limit_millis);
