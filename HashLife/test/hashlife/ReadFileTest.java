@@ -64,11 +64,11 @@ public class ReadFileTest {
     @Test
     public void vasenYlanurkkaOikein() {
         boolean[][] expected = {{false, false, false, true, true, false},
-                            {true, false, false, false, false, true},
-                            {false, true, true, false, false, true},
-                            {true, true, true, true, true, false},
-                            {true, true, true, true, true, true},
-                            {true, false, true, false, false, false}};
+                                {true, false, false, false, false, true},
+                                {false, true, true, false, false, true},
+                                {true, true, true, true, true, false},
+                                {true, true, true, true, true, true},
+                                {true, false, true, false, false, false}};
         
         for (int y = 0; y < expected.length; y++) {
             for (int x = 0; x < expected[y].length; x++) {
