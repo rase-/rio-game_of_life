@@ -16,7 +16,9 @@ public class HashLife {
     public static void main(String[] args) {
         // TODO code application logic here
     }
-    public static MacroCell result(MacroCell nw, MacroCell ne, MacroCell se, MacroCell sw) {
+    /*public static MacroCell result(MacroCell nw, MacroCell ne, MacroCell se, MacroCell sw) {
+        
+        
         MacroCell nw1 = result(nw.nw, nw.ne, nw.se, nw.sw);
         MacroCell ne1 = result(ne.nw, ne.ne, ne.se, ne.sw);
         MacroCell se1 = result(se.nw, se.ne, se.se, se.sw);
@@ -35,7 +37,7 @@ public class HashLife {
         
         return new MacroCell(nw2, ne2, se2, sw2);
         
-    }
+    }*/
 }
 
 interface CellGroup {
@@ -43,17 +45,4 @@ interface CellGroup {
 }
 
 
-class MacroCell {
-    MacroCell nw;
-    MacroCell ne;
-    MacroCell sw;
-    MacroCell se;
-    //The quadrants
-    public MacroCell() {
-        //Do stuff here
-    }
 
-    MacroCell(MacroCell nw2, MacroCell ne2, MacroCell se2, MacroCell sw2) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-}
