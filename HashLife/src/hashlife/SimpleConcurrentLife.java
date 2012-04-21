@@ -5,6 +5,8 @@
 package hashlife;
 
 import concurrency.ArrayUpdatingUnit;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -44,16 +46,24 @@ public class SimpleConcurrentLife {
 
         
         // Print the result, same format as input except the job header.
+        String fileContent = "";
         for (int y = 0; y < arrays[0].length; y++) {
             StringBuilder output = new StringBuilder();
             for (int x = 0; x < arrays[0][y].length; x++) {
-                output.append((arrays[0][y][x] ? 1 : 0)).append(" ");
+                output.append((arrays[0][y][x] ? 1 : 0)); //.append(" ");
             }
-            output.deleteCharAt(output.length()-1);
+            //output.deleteCharAt(output.length()-1);
+            fileContent += output + "\n";
             System.out.println(output);
+            
         }
         
         long stop = System.currentTimeMillis();
+        FileWriter writer = new FileWriter(new File("result.txt"));
+        writer.write(fileContent);
+        writer.close();
+        
+        
         
         System.err.println("Whoa, that was snappy! Fast as lightning! only took us " + (stop-start) + "ms!");
         System.err.println("Using class SimpleConcurrentLife");
