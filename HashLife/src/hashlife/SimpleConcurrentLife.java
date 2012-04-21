@@ -50,11 +50,11 @@ public class SimpleConcurrentLife {
         for (int y = 0; y < arrays[0].length; y++) {
             StringBuilder output = new StringBuilder();
             for (int x = 0; x < arrays[0][y].length; x++) {
-                output.append((arrays[0][y][x] ? 1 : 0)); //.append(" ");
+                output.append((arrays[0][y][x] ? 1 : 0)).append(" ");
             }
-            //output.deleteCharAt(output.length()-1);
+            output.deleteCharAt(output.length()-1);
             fileContent += output + "\n";
-            System.out.println(output);
+            //System.out.println(output);
             
         }
         
@@ -64,13 +64,11 @@ public class SimpleConcurrentLife {
         writer.close();
         
         
-        
-        System.err.println("Whoa, that was snappy! Fast as lightning! only took us " + (stop-start) + "ms!");
+        System.err.println("Whoa, that was snappy! Fast as lightning! only took us " + (stop-start) + "ms altogether!");
         System.err.println("Using class SimpleConcurrentLife");
-        System.err.println("Using " + threads + "threads");
-        LifeJob expected = new LifeJob("life_800_10000_expected_result.txt");
-        
-        
+        System.err.println("Using " + threads + " threads");
+        SolutionChecker checker = new SolutionChecker(new File("result.txt"), new File("life_800_10000_expected_result.txt"));
+        System.out.println(checker.checkSolution());
     }
 
     private static void swapArrays(boolean[][][] arrays) {
