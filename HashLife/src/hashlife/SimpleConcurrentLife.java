@@ -58,6 +58,9 @@ public class SimpleConcurrentLife {
         System.err.println("Whoa, that was snappy! Fast as lightning! only took us " + (stop-start) + "ms!");
         System.err.println("Using class SimpleConcurrentLife");
         System.err.println("Using " + threads + "threads");
+        LifeJob expected = new LifeJob("life_800_10000_expected_result.txt");
+        
+        
     }
 
     private static void swapArrays(boolean[][][] arrays) {

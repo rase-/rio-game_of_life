@@ -35,8 +35,7 @@ public class LifeJob {
         this.steps = temp.steps;
         this.cells = temp.cells;
     }
-    
-    
+   
     
     
     /** Palauttaa tehtävien askelten lukumäärän
