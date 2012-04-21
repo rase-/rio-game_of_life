@@ -4,6 +4,10 @@
  */
 package hashlife;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author kviiri
@@ -14,7 +18,7 @@ public class HashLife {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
     }
     /*public static MacroCell result(MacroCell nw, MacroCell ne, MacroCell se, MacroCell sw) {
         
@@ -38,10 +42,6 @@ public class HashLife {
         return new MacroCell(nw2, ne2, se2, sw2);
         
     }*/
-}
-
-interface CellGroup {
-    public CellGroup result();
 }
 
 
