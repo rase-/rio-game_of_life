@@ -13,7 +13,9 @@ public class LifeFunctions {
     public static void updateArrays(boolean[][] reference, boolean[][] result, int current_thread, int thread_count) {
         int range_length = reference.length / thread_count;
         int range_start = range_length * current_thread;
-        int range_stop = Math.min(range_length * (current_thread + 1), reference.length);
+        int range_stop = range_length * (current_thread + 1);
+        
+        if (current_thread == thread_count-1) range_stop = reference.length;
         
         for (int y = range_start; y < range_stop; y++) {
             for (int x = 0; x < reference[y].length; x++) {

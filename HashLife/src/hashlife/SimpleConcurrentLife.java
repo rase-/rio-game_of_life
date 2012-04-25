@@ -46,21 +46,19 @@ public class SimpleConcurrentLife {
 
         
         // Print the result, same format as input except the job header.
-        String fileContent = "";
+        StringBuilder fileContent = new StringBuilder();
         for (int y = 0; y < arrays[0].length; y++) {
-            StringBuilder output = new StringBuilder();
             for (int x = 0; x < arrays[0][y].length; x++) {
-                output.append((arrays[0][y][x] ? 1 : 0)).append(" ");
+                fileContent.append((arrays[0][y][x] ? 1 : 0)).append(" ");
             }
-            output.deleteCharAt(output.length()-1);
-            fileContent += output + "\n";
+            fileContent.deleteCharAt(fileContent.length()-1).append('\n');
             //System.out.println(output);
             
         }
         
         long stop = System.currentTimeMillis();
         FileWriter writer = new FileWriter(new File("result.txt"));
-        writer.write(fileContent);
+        writer.write(fileContent.toString());
         writer.close();
         
         
