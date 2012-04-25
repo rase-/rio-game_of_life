@@ -55,8 +55,8 @@ public class HashLifeTest {
         MacroCell se = null;
         MacroCell sw = null;
         MacroCell expResult = null;
-        MacroCell result = HashLife.result(nw, ne, se, sw);
-        assertEquals(expResult, result);
+//        MacroCell result = HashLife.result(nw, ne, se, sw);
+//        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

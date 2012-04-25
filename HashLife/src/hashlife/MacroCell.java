@@ -18,16 +18,18 @@ public class MacroCell {
     public static final byte MAGIC_DEAD = 0;
     public byte[][] cells;
     private MacroCell result;
-    MacroCell nw;
-    MacroCell ne;
-    MacroCell sw;
-    MacroCell se;
+    MacroCell nw, ne, sw, se;
     //The quadrants
 
     public MacroCell(MacroCell nw2, MacroCell ne2, MacroCell se2, MacroCell sw2) {
+		
         cells = new byte[nw2.cells.length * 2][nw2.cells.length * 2];
-        for (int x = 0; x < cells.length; x++) {
+        
+		// tässä lasketaan mitkä solut kuuluvat mihinkin alueeseen
+		for (int x = 0; x < cells.length; x++) {
+			
             for (int y = 0; y < cells.length; y++) {
+				
                 if (x < cells.length / 2) {
                     if (y < cells.length / 2) {
                         cells[x][y] = nw2.cells[x][y];
@@ -43,6 +45,7 @@ public class MacroCell {
                 }
             }
         }
+		
         nw = nw2;
         ne = ne2;
         se = se2;
@@ -53,6 +56,7 @@ public class MacroCell {
 
         result = null;
 
+		// jos luotuja soluja on vähemmän kuin neljä, ei tiedetä vielä lopputulosta
         if (cells.length > 4) {
             byte[][] nwCells = new byte[cells.length / 2][cells.length / 2];
             byte[][] neCells = new byte[cells.length / 2][cells.length / 2];
@@ -68,43 +72,33 @@ public class MacroCell {
                 }
             }
 
-            if (hashManager.containsKey(nw)) {
-                nw = hashManager.get(nw);
-            } else {
-                nw = new MacroCell(nwCells);
-            }
-
-            if (hashManager.containsKey(ne)) {
-                ne = hashManager.get(ne);
-            } else {
-                ne = new MacroCell(neCells);
-            }
-
-            if (hashManager.containsKey(se)) {
-                se = hashManager.get(se);
-            } else {
-                se = new MacroCell(seCells);
-            }
-
-            if (hashManager.containsKey(sw)) {
-                sw = hashManager.get(sw);
-            } else {
-                sw = new MacroCell(swCells);
-            }
-
-
+			// jos solu löytyy hash-taulukosta, ei sitä tarvitse laskea uudelleen
+			// muussa tapauksessa luodaan uusi solu joka laskee tuloksensa			
+			this.setCell(nw, nwCells);
+			this.setCell(ne, neCells);
+			this.setCell(se, seCells);
+			this.setCell(sw, swCells);
+			
         }
 
 
     }
+	
+	private void setCell(MacroCell cell, byte[][] cells) {
+		 if (hashManager.containsKey(cell)) {
+                cell = hashManager.get(cell);
+            } else {
+                cell = new MacroCell(cells);
+            }
+	}
 
     public MacroCell result() {
-        //Laskettu jo?
+        //Laskettu jo? Voidaan palauttaa suoraan ilman laskemista! (jee)
         if (result != null) {
             return result;
         }
 
-
+		// ladketaan tulos jos soluja löytyy neljä
         if (cells.length == 4) {
             byte[][] resultArray = new byte[2][2];
             for (int x = 1; x <= 2; x++) {
@@ -137,7 +131,6 @@ public class MacroCell {
     }
 
     public static MacroCell result(MacroCell nw, MacroCell ne, MacroCell se, MacroCell sw) {
-
 
         MacroCell nw1 = result(nw.nw, nw.ne, nw.se, nw.sw);
         MacroCell ne1 = result(ne.nw, ne.ne, ne.se, ne.sw);

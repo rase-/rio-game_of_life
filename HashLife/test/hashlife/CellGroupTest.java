@@ -38,18 +38,18 @@ public class CellGroupTest {
     @Test
     public void testResult() {
         System.out.println("result");
-        CellGroup instance = new CellGroupImpl();
-        CellGroup expResult = null;
-        CellGroup result = instance.result();
-        assertEquals(expResult, result);
+//        CellGroup instance = new CellGroupImpl();
+//        CellGroup expResult = null;
+//        CellGroup result = instance.result();
+//        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
-    public class CellGroupImpl implements CellGroup {
+//    public class CellGroupImpl implements CellGroup {
 
-        public CellGroup result() {
-            return null;
-        }
-    }
+//        public CellGroup result() {
+//            return null;
+//        }
+//    }
 }
