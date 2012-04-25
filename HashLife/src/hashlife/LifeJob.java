@@ -6,7 +6,7 @@ package hashlife;
 
 import java.io.IOException;
 
-/** Työyksikkö, viite game of life-lautaan ja tieto askelten lukumäärästä.
+/** Game of life -job unit. Internal representation of a game of life board and its status.
  *
  * @author scolphoy
  */
@@ -25,10 +25,10 @@ public class LifeJob {
     }
     
     
-    /** Luo olion suoraan tiedostonimestä
+    /** Creates the job from a filename string.
      * 
-     * @param filepath Polku tiedostoon josta syötetiedosto löytyy
-     * @throws IOException Syötetiedoston lukemisessa tapahtuu virhe
+     * @param filepath Path of the input file.
+     * @throws IOException An error occurred in reading the input file.
      */
     public LifeJob(String filepath) throws IOException {
         LifeJob temp = ReadFile.fileToLifeJob(filepath);
@@ -38,9 +38,9 @@ public class LifeJob {
    
     
     
-    /** Palauttaa tehtävien askelten lukumäärän
+    /** Returns the count of steps for this job.
      * 
-     * @return Askelten lukumäärä 
+     * @return Number of steps total.
      */
     public int getSteps() {
         return steps;
@@ -49,9 +49,9 @@ public class LifeJob {
     
     
     
-    /** Palauttaa viitteen game of life-lautaan
+    /** Returns a pointer to the game of life -board.
      * 
-     * @return Game of Life -taulukko koordinaattien järjestyksellä [y][x], solu jossa true viittaa elossa olevaan soluun.
+     * @return Game of Life -board with coordinates [y][x], cell with the value True represents a live cell, a cell with the value False represents a dead cell.
      */
     public boolean[][] getCells() {
         return cells;
@@ -60,9 +60,9 @@ public class LifeJob {
     
     
     
-    /** Palauttaa merkkijonoesityksen työyksikön tiedoista
+    /** Returns a descriptive String about this job unit.
      * 
-     * @return Merkkojono, jossa tieto game of life-laudan mitoista ja tehtävistä askelista.
+     * @return A String with information about the board measures and the total step count.
      */
     @Override
     public String toString() {
@@ -72,10 +72,10 @@ public class LifeJob {
     
     
     
-    /** Vertaa kahta työyksikköä toisiinsa
+    /** Compares two job units with each other
      * 
-     * @param that Verrattava työyksikkö
-     * @return true jos samanlaiset, false jos erilaiset. Vertailu ulottuu game of life-laudan sisältöön.
+     * @param that The job unit to compare to
+     * @return true if the units are similar, false if not. The comparison checks the total step count, board measures and content.
      */
     public boolean equals(LifeJob that) {
         if (this.steps != that.steps) return false;

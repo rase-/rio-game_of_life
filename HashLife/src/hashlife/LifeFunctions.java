@@ -4,12 +4,19 @@
  */
 package hashlife;
 
-/**
+/** This class implements the functions for updating a reference two-dimentional boolean array representing a game-of-life board one step.
  *
  * @author scolphoy
  */
 public class LifeFunctions {
     
+    /**Method for updating the next step from reference array to result array
+     * 
+     * @param reference The starting position for this round
+     * @param result The array where the result goes
+     * @param current_thread The number of the thread calling this method, the first thread must be 0
+     * @param thread_count  The total number of threads, must be at least 1
+     */
     public static void updateArrays(boolean[][] reference, boolean[][] result, int current_thread, int thread_count) {
         int range_length = reference.length / thread_count;
         int range_start = range_length * current_thread;
@@ -24,6 +31,13 @@ public class LifeFunctions {
         }
     }
 
+    /** Checks if the given cell from the reference array should be alive on the next round
+     * 
+     * @param reference The two-dimentional reference array
+     * @param y The y coordinate
+     * @param x The x coordinate
+     * @return True if the cell should be alive on the next round, False if not.
+     */
     private static boolean nextAlive(boolean[][] reference, int y, int x) {
         int liveNeighbours = 0;
         boolean liveCell = false;
@@ -53,6 +67,13 @@ public class LifeFunctions {
         return liveCell;
     }
 
+    /** Checks if the given cell is alive in the reference array
+     * 
+     * @param reference The two-dimentional reference array
+     * @param y The y coordinate
+     * @param x The x coordinate
+     * @return True if the cell is alive, False if the cell is dead or coordinates are outside the reference array's boundaries.
+     */
     private static boolean isAlive(boolean[][] reference, int y, int x) {
         if (y < 0 || y >= reference.length) return false;
         if (x < 0 || x >= reference[y].length) return false;
