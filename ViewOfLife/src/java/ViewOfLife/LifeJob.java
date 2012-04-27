@@ -23,12 +23,14 @@ public class LifeJob extends Thread implements Runnable {
     private boolean done;
     private boolean running;
     private long startTime;
+    private long endTime;
     private int steps;
     private boolean[][] cells;
     private String result;
-    private long endTime;
     private int threadCount = 1;
     private int step;
+    private long pTimeStart;
+    private long pTimeStop;
 
     /**
      * Creates a LifeJob-object from an input stream
@@ -96,6 +98,7 @@ public class LifeJob extends Thread implements Runnable {
         }
 
         // On each step of the way, make all the threads advance one step
+        pTimeStart = System.currentTimeMillis();
         for (int round = 0; round < totalSteps(); round++) {
             for (ArrayUpdatingUnit x : threads) {
                 x.nextStep();
@@ -104,7 +107,9 @@ public class LifeJob extends Thread implements Runnable {
             latch.release(threadCount); // This would have been the 'reset' I was missing
             step = round;
         }
+        pTimeStop = System.currentTimeMillis();
         
+       
         // When done, release the threads
         for (ArrayUpdatingUnit x : threads) {
             x.finish();
@@ -247,6 +252,30 @@ public class LifeJob extends Thread implements Runnable {
      */
     public int totalSteps() {
         return steps;
+    }
+    
+    /**
+     * Returns the start time of execution of parallel section in milliseconds from unix epoc
+     * @return The start time of the parallel section, milliseconds from epoch
+     */
+    long pTimeStart() {
+        return pTimeStart;
+    }
+    
+    /**
+     * Returns the end time of execution of parallel section in milliseconds from unix epoc
+     * @return The end time of the parallel section, milliseconds from epoch
+     */
+    long pTimeStop() {
+        return pTimeStop;
+    }
+    
+    /**
+     * Returns the change in time between the beginning and the end of the parallel section
+     * @return The change in time in milliseconds
+     */
+    long pTimeDelta() {
+        return pTimeStop - pTimeStart;
     }
 
     @Override

@@ -74,6 +74,8 @@ public class index extends HttpServlet {
         else if (!job.running() && job.done()) {
             long elapsed = job.endTime() - job.startTime();
             out.println(String.format("Elapsed time: %s (%dms)", naturalTime(elapsed), elapsed));
+            out.println(String.format("Step computations: %s (%dms)", naturalTime(job.pTimeDelta()), job.pTimeDelta()));
+
             out.println(String.format("Average speed: %.2f steps/s", (job.currentStep() * 1000.0 / elapsed)));
             if (reference != null) out.println("Result comparison: " + (match() ? "Match" : "No Match"));
             out.println("Result:");
@@ -109,7 +111,9 @@ public class index extends HttpServlet {
         Scanner y = new Scanner(job.result());
         Scanner x = new Scanner(new InputStreamReader(reference));
         
-        while (x.hasNextLine() && y.hasNextLine()) {
+        while (x.hasNextLine() || y.hasNextLine()) {
+            if (!x.hasNextLine()) return false;
+            if (!y.hasNextLine()) return false;
             if (x.nextLine().trim().equals(y.nextLine().trim()) == false) return false;
         }
         
@@ -160,6 +164,8 @@ public class index extends HttpServlet {
 
         // Let's process the sent form.
         try {
+            job = null;
+            reference = null;
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {
                 if (item.isFormField()) {
@@ -189,6 +195,7 @@ public class index extends HttpServlet {
                         }
                     } else if (fieldname.equals("referencefile")) {
                         reference = filecontent;
+                        if (reference.available() == 0) reference = null;
                     }
                 }
             }
