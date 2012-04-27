@@ -6,30 +6,58 @@ package concurrency;
 
 import ViewOfLife.LifeFunctions;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author tonykovanen
  */
-public class ArrayUpdatingUnit implements Runnable {
+public class ArrayUpdatingUnit extends Thread implements Runnable {
     private boolean[][] reference;
     private boolean[][] result;
     private int threads;
     private int thisThread;
-    private CountDownLatch latch;
+    private Semaphore s;
+    private Semaphore latch;
+    private boolean running;
     
-    public ArrayUpdatingUnit(boolean[][] reference, boolean[][] result, int threads, int thisThread, CountDownLatch latch) {
+    public ArrayUpdatingUnit(boolean[][] reference, boolean[][] result, int threads, int thisThread, Semaphore latch) {
         this.reference = reference;
         this.result = result;
         this.threads = threads;
         this.thisThread = thisThread;
         this.latch = latch;
+        s = new Semaphore(0);
     }
     
     @Override
     public void run() {
-        LifeFunctions.updateArrays(reference, result, thisThread, threads);
-        latch.countDown();
+        running = true;
+        try { s.acquire();} catch (InterruptedException ex) {}
+        while (running) {
+            LifeFunctions.updateArrays(reference, result, thisThread, threads);
+            swap();
+            latch.release();
+            try { s.acquire();} catch (InterruptedException ex) {}
+        }
+    }
+    
+    public void swap() {
+        boolean[][] temp = reference;
+        reference = result;
+        result = temp;
+    }
+    
+    public void nextStep() {
+        try {latch.acquire();} catch (InterruptedException ex) {}         
+        s.release();
+    }
+    
+    public void finish() {
+        running=false;
+        s.release();
     }
     
 }

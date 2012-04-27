@@ -8,6 +8,7 @@ import concurrency.ArrayUpdatingUnit;
 import java.io.*;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +27,7 @@ public class LifeJob extends Thread implements Runnable {
     private boolean[][] cells;
     private String result;
     private long endTime;
-    private int threads = 1;
+    private int threadCount = 1;
     private int step;
 
     /**
@@ -86,16 +87,27 @@ public class LifeJob extends Thread implements Runnable {
         arrays[0] = getCells();
         arrays[1] = new boolean[arrays[0].length][arrays[0].length];
 
-        // Bake 'n switch
-        for (int round = 0; round < totalSteps(); round++) {
-            CountDownLatch latch = new CountDownLatch(threads);
-            for (int i = 0; i < threads; i++) {
-                new Thread(new ArrayUpdatingUnit(arrays[0], arrays[1], threads, i, latch)).start();
-            }
+        // Creating the threads and an appropriate Semaphore (because couldn't find a way to reset a CountDownLatch)
+        Semaphore latch = new Semaphore(threadCount);
+        ArrayUpdatingUnit[] threads = new ArrayUpdatingUnit[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new ArrayUpdatingUnit(arrays[0], arrays[1], threadCount, i, latch);
+            threads[i].start();
+        }
 
-            latch.await();
-            swapArrays(arrays); // The newest will always be arrays[0] !
+        // On each step of the way, make all the threads advance one step
+        for (int round = 0; round < totalSteps(); round++) {
+            for (ArrayUpdatingUnit x : threads) {
+                x.nextStep();
+            }
+            latch.acquire(threadCount); // This is a way to emulate the latch waiting with a semaphore
+            latch.release(threadCount); // This would have been the 'reset' I was missing
             step = round;
+        }
+        
+        // When done, release the threads
+        for (ArrayUpdatingUnit x : threads) {
+            x.finish();
         }
 
         // Print the result, same format as input except the job header.
@@ -181,7 +193,7 @@ public class LifeJob extends Thread implements Runnable {
      * @return The number of threads.
      */
     public int getThreadCount() {
-        return threads;
+        return threadCount;
     }
 
     /**
@@ -193,7 +205,7 @@ public class LifeJob extends Thread implements Runnable {
      */
     public boolean setThreadCount(int count) {
         if (count > 0) {
-            threads = count;
+            threadCount = count;
             return true;
         }
         return false;

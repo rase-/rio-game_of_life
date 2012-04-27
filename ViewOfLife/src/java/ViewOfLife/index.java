@@ -4,10 +4,9 @@
  */
 package ViewOfLife;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -27,6 +26,7 @@ public class index extends HttpServlet {
 
     private static LifeJob job;
     private static int threads;
+    private static InputStream reference;
 
     /**
      * Processes requests for both HTTP
@@ -74,7 +74,8 @@ public class index extends HttpServlet {
         else if (!job.running() && job.done()) {
             long elapsed = job.endTime() - job.startTime();
             out.println(String.format("Elapsed time: %s (%dms)", naturalTime(elapsed), elapsed));
-            out.println(String.format("Average speed: %.2f steps/s", (job.currentStep() * 1000.0 / elapsed)));            
+            out.println(String.format("Average speed: %.2f steps/s", (job.currentStep() * 1000.0 / elapsed)));
+            if (reference != null) out.println("Result comparison: " + (match() ? "Match" : "No Match"));
             out.println("Result:");
             out.println(job.result());
         }
@@ -99,6 +100,18 @@ public class index extends HttpServlet {
         
         return (hours>0 ? hours+"h ":"") + (minutes>0 ? minutes+"m ":"") + seconds+"s";
     }
+    
+    boolean match() {
+        Scanner y = new Scanner(job.result());
+        Scanner x = new Scanner(new InputStreamReader(reference));
+        
+        while (x.hasNextLine() && y.hasNextLine()) {
+            if (x.nextLine().trim().equals(y.nextLine().trim()) == false) return false;
+        }
+        
+        return true;
+        
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -120,6 +133,7 @@ public class index extends HttpServlet {
             Logger.getLogger(index.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 
     /**
      * Handles the HTTP
@@ -169,6 +183,8 @@ public class index extends HttpServlet {
                             System.out.println("Error setting up job");
                             job = null;
                         }
+                    } else if (fieldname.equals("referencefile")) {
+                        reference = filecontent;
                     }
                 }
             }

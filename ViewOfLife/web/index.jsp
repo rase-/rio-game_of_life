@@ -15,7 +15,8 @@
         <h1>Welcome!</h1>
         <p>Enter the game of life content file and how many threads to use.</p>
         <form action="Life" method="post" enctype="multipart/form-data">
-            File: <input type="file" name="inputfile" size="20"><br />
+            File: <input type="file" name="inputfile" size="40"><br />
+            Expected result: <input type="file" name="referencefile" size="40"><br />
             Threads: <input type="text" name="threads" value="4" size="4"><br />
             <input type="submit" value="Send">
         </form>
