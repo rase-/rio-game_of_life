@@ -30,18 +30,18 @@ public class LifeJob extends Thread implements Runnable {
     private int step;
 
     /**
-     * Luo LifeJob-olion askelmäärän ja taulukkoviittauksen perusteella
+     * Creates a LifeJob-object from an input stream
      *
-     * @param steps Askelten lukumäärä
-     * @param cells Viite pelilautaa esittävään kaksiulotteiseen
-     * boolean-taulukkoon
+     * @param inputData The input stream containing job data
+     * @throws IOException An error with the input stream
      */
     public LifeJob(InputStream inputData) throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(inputData);
-        BufferedReader inputReader = new BufferedReader(inputStreamReader);
         if (inputData.available() == 0) {
             throw new IOException("No file entered!");
         }
+
+        InputStreamReader inputStreamReader = new InputStreamReader(inputData);
+        BufferedReader inputReader = new BufferedReader(inputStreamReader);
 
         // Reading the job parameters and constructing a proper array for the board
         int dimension, steps;
@@ -65,48 +65,16 @@ public class LifeJob extends Thread implements Runnable {
         }
 
 
-
+        // Now setting the object's fields
         this.steps = steps;
         this.cells = cells;
     }
 
     /**
-     * Returns a descriptive String about this job unit.
+     * Method for computing the job
      *
-     * @return A String with information about the board measures and the total
-     * step count.
+     * @throws InterruptedException Background thread got interrupted
      */
-    @Override
-    public String toString() {
-        return "Game of life, " + cells.length + "x" + cells.length + ", " + steps + " steps";
-    }
-
-    /**
-     * Compares two job units with each other
-     *
-     * @param that The job unit to compare to
-     * @return true if the units are similar, false if not. The comparison
-     * checks the total step count, board measures and content.
-     */
-    public boolean equals(LifeJob that) {
-        if (this.steps != that.steps) {
-            return false;
-        }
-        if (this.cells.length != that.cells.length) {
-            return false;
-        }
-
-        for (int y = 0; y < cells.length; y++) {
-            for (int x = 0; x < cells[y].length; x++) {
-                if (this.cells[y][x] != that.cells[y][x]) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     private void doTheJob() throws InterruptedException {
         done = false;
         running = true;
@@ -119,7 +87,7 @@ public class LifeJob extends Thread implements Runnable {
         arrays[1] = new boolean[arrays[0].length][arrays[0].length];
 
         // Bake 'n switch
-        for (int round = 0; round < getSteps(); round++) {
+        for (int round = 0; round < totalSteps(); round++) {
             CountDownLatch latch = new CountDownLatch(threads);
             for (int i = 0; i < threads; i++) {
                 new Thread(new ArrayUpdatingUnit(arrays[0], arrays[1], threads, i, latch)).start();
@@ -147,31 +115,15 @@ public class LifeJob extends Thread implements Runnable {
 
     }
 
+    /**
+     * Swaps who arrays in a three dimensional boolean array
+     *
+     * @param arrays The target array
+     */
     private static void swapArrays(boolean[][][] arrays) {
         boolean[][] temp = arrays[0];
         arrays[0] = arrays[1];
         arrays[1] = temp;
-    }
-
-    public boolean running() {
-        return running;
-    }
-
-    public boolean done() {
-        return done;
-    }
-
-    public String result() {
-        return result;
-    }
-
-    /**
-     * Returns the count of steps for this job.
-     *
-     * @return Number of steps total.
-     */
-    public int getSteps() {
-        return steps;
     }
 
     /**
@@ -184,37 +136,117 @@ public class LifeJob extends Thread implements Runnable {
     public boolean[][] getCells() {
         return cells;
     }
-    
-    public boolean setThreads(int count) {
+
+    /**
+     * Returns a descriptive String about this job unit.
+     *
+     * @return A String with information about the board measures and the total
+     * step count.
+     */
+    @Override
+    public String toString() {
+        return "Game of life, " + cells.length + "x" + cells.length + ", " + steps + " steps";
+    }
+
+    /**
+     * Returns the running status of the job
+     *
+     * @return True if background job is running, False if not
+     */
+    public boolean running() {
+        return running;
+    }
+
+    /**
+     * Returns if the job is done or not
+     *
+     * @return True if done, False if not.
+     */
+    public boolean done() {
+        return done;
+    }
+
+    /**
+     * Returns a String presentation of the computed result
+     *
+     * @return A String representing the computed result, null if not done
+     */
+    public String result() {
+        return result;
+    }
+
+    /**
+     * Returns the number of threads to use.
+     *
+     * @return The number of threads.
+     */
+    public int getThreadCount() {
+        return threads;
+    }
+
+    /**
+     * Sets the amount of threads to use. The thread count must be at least 1.
+     * Values 0 or less will not change the thread count.
+     *
+     * @param count The thread count to use.
+     * @return True if change was successful, False if not.
+     */
+    public boolean setThreadCount(int count) {
         if (count > 0) {
             threads = count;
             return true;
         }
         return false;
     }
-    
-    public int threads() {
-        return threads;
+
+    /**
+     * Returns the time current job was started.
+     *
+     * @return The time when the job was started in milliseconds from unix
+     * epoch, 0 if not started.
+     */
+    long startTime() {
+        return startTime;
     }
-    
+
+    /**
+     * Returns the time current job was finished.
+     *
+     * @return The time when the job finished in milliseconds from unix epoch, 0
+     * if not finished.
+     */
+    long endTime() {
+        return endTime;
+    }
+
+    /**
+     * Returns the current step in progress
+     *
+     * @return The current step
+     */
+    int currentStep() {
+        return step;
+    }
+
+    /**
+     * Returns the count of steps for this job.
+     *
+     * @return Number of steps total.
+     */
+    public int totalSteps() {
+        return steps;
+    }
+
     @Override
+    /**
+     * The run method for implementing the interface Runnable
+     *
+     */
     public void run() {
         try {
             doTheJob();
         } catch (InterruptedException ex) {
             Logger.getLogger(LifeJob.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    long startTime() {
-        return startTime;
-    }
-
-    long endTime() {
-        return endTime;
-    }
-    
-    int step() {
-        return step;
     }
 }
