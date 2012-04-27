@@ -59,25 +59,42 @@ public class index extends HttpServlet {
         if (!job.running() && !job.done()) {
             out.println("Starting the job...");
             job.start();
-        }
-
-        if (job.running() && !job.done()) {
-            out.println("Current step: " + job.step());
-            out.println("Job running for " + ((System.currentTimeMillis() - job.startTime())) / 1000 + "s...");
+            return;
         }
 
 
-        if (!job.running() && job.done()) {
-            out.println("Elapsed time: " + (job.endTime() - job.startTime()) + "ms" + " (" + String.format("%.2f",((job.endTime() - job.startTime()) / 1000.0)) + "s)");
+        else if (job.running() && !job.done()) {
+            long elapsed = System.currentTimeMillis() - job.startTime();
+            int step = job.step();
+            out.println(String.format("Progress: %.2f%% (step %d)", 100.0*step/job.getSteps(), step));
+            out.println(String.format("Elapsed time: %s (%dms)", naturalTime(elapsed), elapsed));
+            out.println(String.format("Average speed: %.2f steps/s", (step*1000.0/elapsed)));            
+        }
+
+
+        else if (!job.running() && job.done()) {
+            long elapsed = job.endTime() - job.startTime();
+            out.println(String.format("Elapsed time: %s (%dms)", naturalTime(elapsed), elapsed));
+            out.println(String.format("Average speed: %.2f steps/s", (job.step() * 1000.0 / elapsed)));            
             out.println("Result:");
             out.println(job.result());
         }
 
 
     }
-
-  
-
+    
+    String naturalTime(long time) {
+        time = time / 1000; // ms to s
+        int hours = (int)(time/3600);
+        
+        time = time % 3600;
+        int minutes = (int) (time/60);
+        
+        time = time % 60;
+        int seconds = (int) (time);
+        
+        return (hours>0 ? hours+"h ":"") + (minutes>0 ? minutes+"m ":"") + seconds+"s";
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -112,7 +129,7 @@ public class index extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         if (job != null && job.running() && !job.done()) {
             response.sendRedirect("Life");
             return;
@@ -156,8 +173,10 @@ public class index extends HttpServlet {
             throw new ServletException("Cannot parse multipart request.", e);
         }
 
-        if (job != null) job.setThreads(threads);
-        
+        if (job != null) {
+            job.setThreads(threads);
+        }
+
         try {
             processRequest(request, response);
 
