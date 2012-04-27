@@ -101,6 +101,10 @@ public class index extends HttpServlet {
         return (hours>0 ? hours+"h ":"") + (minutes>0 ? minutes+"m ":"") + seconds+"s";
     }
     
+    /** Matches the computed result to the one given by user. This method is sensitive to formatting.
+     * 
+     * @return True if the results matched, False if not
+     */
     boolean match() {
         Scanner y = new Scanner(job.result());
         Scanner x = new Scanner(new InputStreamReader(reference));
