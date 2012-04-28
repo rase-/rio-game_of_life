@@ -41,7 +41,7 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
         if (thisThread == threads - 1) {  // Just in case there's a roundign error
             range_stop = reference.length;
         }
-        System.out.println("Thread: " + thisThread + "\tRange: " + range_start + "-" + range_stop + "\tRows: " + (range_stop-range_start));
+        System.out.println("Thread: " + thisThread + "\tRange: " + range_start + "-" + (range_stop-1) + "\tRows: " + (range_stop-range_start));
 
     }
     
