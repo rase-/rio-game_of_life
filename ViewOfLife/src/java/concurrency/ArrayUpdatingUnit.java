@@ -23,6 +23,9 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
     private Semaphore latch;
     private boolean running;
     
+    private int range_start;
+    private int range_stop;
+    
     public ArrayUpdatingUnit(boolean[][] reference, boolean[][] result, int threads, int thisThread, Semaphore latch) {
         this.reference = reference;
         this.result = result;
@@ -30,6 +33,16 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
         this.thisThread = thisThread;
         this.latch = latch;
         s = new Semaphore(0);
+        
+        double range_length = (double)reference.length / threads;
+        range_start = (int)Math.floor((thisThread    * range_length) + 0.5);
+        range_stop = (int)Math.floor(((thisThread+1) * range_length) + 0.5);
+                
+        if (thisThread == threads - 1) {  // Just in case there's a roundign error
+            range_stop = reference.length;
+        }
+        System.out.println("Thread: " + thisThread + "\tRange: " + range_start + "-" + range_stop + "\tRows: " + (range_stop-range_start));
+
     }
     
     @Override
@@ -37,7 +50,7 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
         running = true;
         try { s.acquire();} catch (InterruptedException ex) {}
         while (running) {
-            LifeFunctions.updateArrays(reference, result, thisThread, threads);
+            LifeFunctions.updateArrays(reference, result, range_start, range_stop);
             swap();
             latch.release();
             try { s.acquire();} catch (InterruptedException ex) {}

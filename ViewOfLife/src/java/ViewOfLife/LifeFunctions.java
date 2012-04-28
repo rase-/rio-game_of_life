@@ -17,18 +17,10 @@ public class LifeFunctions {
      *
      * @param reference The starting position for this round
      * @param result The array where the result goes
-     * @param current_thread The number of the thread calling this method, the
-     * first thread must be 0
-     * @param thread_count The total number of threads, must be at least 1
+     * @param range_start The index of the first row to check, starting from 0
+     * @param range_stop The index of the first row not to check, eg. array length.
      */
-    public static void updateArrays(boolean[][] reference, boolean[][] result, int current_thread, int thread_count) {
-        int range_length = reference.length / thread_count;
-        int range_start = range_length * current_thread;
-        int range_stop = range_length * (current_thread + 1);
-
-        if (current_thread == thread_count - 1) {
-            range_stop = reference.length;
-        }
+    public static void updateArrays(boolean[][] reference, boolean[][] result, int range_start, int range_stop) {
 
         for (int y = range_start; y < range_stop; y++) {
             for (int x = 0; x < reference[y].length; x++) {
