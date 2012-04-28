@@ -5,16 +5,17 @@
 package ViewOfLife;
 
 import concurrency.ArrayUpdatingUnit;
-import java.io.*;
-import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Game of life -job unit. Internal representation of a game of life board and
- * its status.
+ * its status. Also assigns the computing threads and controls their advancement.
  *
  * @author scolphoy
  */
@@ -94,7 +95,7 @@ public class LifeJob extends Thread implements Runnable {
         ArrayUpdatingUnit[] threads = new ArrayUpdatingUnit[threadCount];
         for (int i = 0; i < threadCount; i++) {
             threads[i] = new ArrayUpdatingUnit(arrays[0], arrays[1], threadCount, i, latch);
-            threads[i].start();
+            threads[i].start(); // This doesn't start computations yet, threads will kindly wait for permission.
         }
 
         // On each step of the way, make all the threads advance one step

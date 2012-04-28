@@ -19,7 +19,7 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
- *
+ * The servlet page for starting the computation, following the advancement and showing the result.
  * @author scolphoy
  */
 public class index extends HttpServlet {
