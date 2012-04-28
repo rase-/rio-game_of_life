@@ -51,11 +51,11 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
 
     }
 
-    @Override
     /**
      * The main run loop. For each step, waits for permission to take the next
      * step or call to shut down. Informs the main thread when the step is done.
      */
+    @Override
     public void run() {
         running = true;
         try {s.acquire();} catch (InterruptedException ex) {}  // Wait for permission before the first step
@@ -93,10 +93,10 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
     }
 
     
-    @Override
     /**
      * Returns a String representation characterizing this thread.
      */
+    @Override
     public String toString() {
         return ("Thread: " + thisThread + "\tRange: " + range_start + "-" + (range_stop - 1) + "\tRows: " + (range_stop - range_start));
 

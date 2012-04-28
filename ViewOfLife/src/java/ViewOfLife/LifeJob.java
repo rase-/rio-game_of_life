@@ -282,11 +282,11 @@ public class LifeJob extends Thread implements Runnable {
         return pTimeStop - pTimeStart;
     }
 
-    @Override
     /**
      * The run method for implementing the interface Runnable
      *
      */
+    @Override
     public void run() {
         try {
             doTheJob();
