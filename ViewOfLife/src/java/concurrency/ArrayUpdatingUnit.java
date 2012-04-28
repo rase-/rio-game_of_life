@@ -80,10 +80,7 @@ public class ArrayUpdatingUnit extends Thread implements Runnable {
      * Advance the computation for this thread's range one step.
      */
     public void nextStep() {
-        try {
-            latch.acquire();
-        } catch (InterruptedException ex) {
-        }
+        try {latch.acquire();} catch (InterruptedException ex) {}
         s.release();
     }
 

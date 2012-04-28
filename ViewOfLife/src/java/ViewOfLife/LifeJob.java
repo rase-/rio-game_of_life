@@ -115,6 +115,9 @@ public class LifeJob extends Thread implements Runnable {
         for (ArrayUpdatingUnit x : threads) {
             x.finish();
         }
+        
+        // If there was an uneven number of steps, the newest array would be arrays[1]
+        if (steps%2 == 1) swapArrays(arrays);
 
         // Print the result, same format as input except the job header.
         StringBuilder fileContent = new StringBuilder();

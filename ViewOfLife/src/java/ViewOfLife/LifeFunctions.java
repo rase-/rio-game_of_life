@@ -21,7 +21,6 @@ public class LifeFunctions {
      * @param range_stop The index of the first row not to check, eg. array length.
      */
     public static void updateArrays(boolean[][] reference, boolean[][] result, int range_start, int range_stop) {
-
         for (int y = range_start; y < range_stop; y++) {
             for (int x = 0; x < reference[y].length; x++) {
                 result[y][x] = nextAlive(reference, y, x);
@@ -40,14 +39,15 @@ public class LifeFunctions {
      */
     private static boolean nextAlive(boolean[][] reference, int y, int x) {
         int liveNeighbours = 0;
-        boolean liveCell = false;
-        if (isAlive(reference, y, x)) {liveCell = true;}
+        boolean liveCell = isAlive(reference, y, x);
 
         if (isAlive(reference, y - 1, x - 1)) {liveNeighbours++;}
         if (isAlive(reference, y - 1, x)) {liveNeighbours++;}
-        if (isAlive(reference, y - 1, x + 1)) {liveNeighbours++;}        
+        if (isAlive(reference, y - 1, x + 1)) {liveNeighbours++;} 
+        
         if (isAlive(reference, y, x - 1)) {liveNeighbours++;}        
-        if (isAlive(reference, y, x + 1)) {liveNeighbours++;}        
+        if (isAlive(reference, y, x + 1)) {liveNeighbours++;}     
+        
         if (isAlive(reference, y + 1, x - 1)) {liveNeighbours++;}        
         if (isAlive(reference, y + 1, x)) {liveNeighbours++;}        
         if (isAlive(reference, y + 1, x + 1)) {liveNeighbours++;}
@@ -56,10 +56,8 @@ public class LifeFunctions {
         // 2. Any live cell with two or three live neighbours lives on to the next generation.
         // 3. Any live cell with more than three live neighbours dies, as if by overcrowding.
         if (liveCell) {
-            if (liveNeighbours == 2 || liveNeighbours == 3) {
-                return true;
-            }
-            return false;
+            if (liveNeighbours == 2 || liveNeighbours == 3) return true;
+            else return false;
         }
 
         // 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
@@ -77,12 +75,8 @@ public class LifeFunctions {
      * coordinates are outside the reference array's boundaries.
      */
     private static boolean isAlive(boolean[][] reference, int y, int x) {
-        if (y < 0 || y >= reference.length) {
-            return false;
-        }
-        if (x < 0 || x >= reference[y].length) {
-            return false;
-        }
+        if (y < 0 || y >= reference.length) return false;
+        if (x < 0 || x >= reference[y].length) return false;
         return reference[y][x];
     }
 }
