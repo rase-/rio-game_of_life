@@ -8,7 +8,8 @@ import java.io.*;
 import java.util.Scanner;
 
 /**
- *
+ * Komentorivikäyttöliittymä joka tunkattu alkuperäisen web-kälin tilalle.
+ * Pahoittelen karskia ulkomuotoa.
  * @author scolphoy
  */
 public class CommandLife {
@@ -17,7 +18,6 @@ public class CommandLife {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
-        // TODO code application logic here
         FileInputStream fis = new FileInputStream(new File(args[0]));
         LifeJob job = new LifeJob(fis);
         job.setThreadCount(Integer.parseInt(args[1]));
@@ -37,10 +37,7 @@ public class CommandLife {
         out.print(job.result());
         out.close();
         System.err.println("Result written in result.txt");
-
-        
-
-        
+   
         if (args.length > 2) System.err.println("Comparison: " + (match(job, args[2]) ? "Match!" : "No match!"));
 
     }
@@ -50,6 +47,7 @@ public class CommandLife {
         Scanner y = new Scanner(job.result());
         Scanner x = new Scanner(new InputStreamReader(reference));
         
+        // If someone finds a solution that reaches the same result with fewer steps, it's not wrong. Hence this.
         if (x.hasNextLine()) {x.nextLine();}    // We don't care how many steps you made! 
         if (y.hasNextLine()) {y.nextLine();}    // Skipping the first line of both results.
         
