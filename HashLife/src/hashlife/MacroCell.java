@@ -98,7 +98,7 @@ public class MacroCell {
             return result;
         }
 
-		// ladketaan tulos jos soluja löytyy neljä
+		// lasketaan tulos jos soluja löytyy neljä
         if (cells.length == 4) {
             byte[][] resultArray = new byte[2][2];
             for (int x = 1; x <= 2; x++) {
