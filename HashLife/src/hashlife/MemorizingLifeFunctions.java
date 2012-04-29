@@ -33,6 +33,7 @@ public class MemorizingLifeFunctions {
         for (int y = range_start; y < range_stop; y++) {
             for (int x = 0; x < reference[y].length; x++) {
                 result[y][x] = nextAlive(reference, y, x);
+                
                 //Update the next neighbor table if state changed
                 if (result[y][x] != reference[y][x]) {
                     //NEW CELL IS BORN

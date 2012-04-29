@@ -33,8 +33,8 @@ public class MemorizingConcurrentLife {
 
         //Initializing the neighbor count matrix
         neighbors = new AtomicInteger[2][arrays[0].length][arrays[0][0].length];
-        for (int y = 0; y < neighbors.length; y++) {
-            for (int x = 0; x < neighbors[y].length; x++) {
+        for (int y = 0; y < neighbors[0].length; y++) {
+            for (int x = 0; x < neighbors[0][y].length; x++) {
                 int num = 0;
                 if (y > 0) {
                     if (x > 0 && arrays[0][y - 1][x - 1]) {
@@ -68,7 +68,8 @@ public class MemorizingConcurrentLife {
                 neighbors[1][y][x] = new AtomicInteger(num);
             }
         }
-        System.out.println("Neighbor array done'd!");
+        
+        System.out.println("Neighbor array done!");
         // Bake 'n switch
         int threads = 16;
         for (int round = 0; round < job.getSteps(); round++) {
