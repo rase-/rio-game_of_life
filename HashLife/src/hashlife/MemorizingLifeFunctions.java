@@ -60,7 +60,6 @@ public class MemorizingLifeFunctions {
      * @return True if the cell should be alive on the next round, False if not.
      */
     private static boolean nextAlive(boolean[][] reference, int y, int x) {
-        System.out.println("Next alive called!");
 
         if (!reference[y][x]) {
             return (MemorizingConcurrentLife.neighbors[0][y][x].get() == 3);

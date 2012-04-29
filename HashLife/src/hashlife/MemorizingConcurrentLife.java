@@ -43,7 +43,7 @@ public class MemorizingConcurrentLife {
                     if (arrays[0][y - 1][x]) {
                         num++;
                     }
-                    if (x < neighbors[y].length - 1 && arrays[0][y - 1][x + 1]) {
+                    if (x < neighbors[0][y].length - 1 && arrays[0][y - 1][x + 1]) {
                         num++;
                     }
                 }
@@ -54,14 +54,14 @@ public class MemorizingConcurrentLife {
                     if (arrays[0][y + 1][x]) {
                         num++;
                     }
-                    if (x < neighbors[y].length - 1 && arrays[0][y + 1][x + 1]) {
+                    if (x < neighbors[0][y].length - 1 && arrays[0][y + 1][x + 1]) {
                         num++;
                     }
                 }
                 if (x > 0 && arrays[0][y][x - 1]) {
                     num++;
                 }
-                if (x < neighbors[y].length - 1 && arrays[0][y][x + 1]) {
+                if (x < neighbors[0][y].length - 1 && arrays[0][y][x + 1]) {
                     num++;
                 }
                 neighbors[0][y][x] = new AtomicInteger(num);
