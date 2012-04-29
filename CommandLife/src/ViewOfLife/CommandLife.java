@@ -29,12 +29,17 @@ public class CommandLife {
         while (!job.done()) {
             Thread.sleep(250);
         }
+        
+        System.err.println(String.format("Time total: %s (%dms)", naturalTime(job.endTime()-job.startTime()), job.endTime()-job.startTime()));
+        System.err.println(String.format("Time computing steps: %s (%dms)", naturalTime(job.pTimeDelta()), job.pTimeDelta()));
+        
         PrintWriter out = new PrintWriter(new File("result.txt"));
         out.print(job.result());
         out.close();
-        
-        System.err.println(String.format("Time: %s (%dms)", naturalTime(job.endTime()-job.startTime()), job.endTime()-job.startTime()));
         System.err.println("Result written in result.txt");
+
+        
+
         
         if (args.length > 2) System.err.println("Comparison: " + (match(job, args[2]) ? "Match!" : "No match!"));
 
