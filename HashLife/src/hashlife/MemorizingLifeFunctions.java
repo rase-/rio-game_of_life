@@ -37,64 +37,11 @@ public class MemorizingLifeFunctions {
                 if (result[y][x] != reference[y][x]) {
                     //NEW CELL IS BORN
                     if (result[y][x]) {
-                        if (y > 0) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x - 1].incrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y - 1][x].incrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x + 1].incrementAndGet();
-                            }
-                        }
-                        if (y < reference.length - 1) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x - 1].incrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y + 1][x].incrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x + 1].incrementAndGet();
-                            }
-                        }
-                        if (x > 0) {
-                            MemorizingConcurrentLife.neighbors[1][y][x - 1].incrementAndGet();
-                        }
-                        if (x < reference[y].length - 1) {
-                            MemorizingConcurrentLife.neighbors[1][y][x + 1].incrementAndGet();
-                        }
-                    } //Old cell is dead
+                        MemorizingConcurrentLife.addNeighbor(y, x);
+                    }
+                    //Cell is dead
                     else {
-                        if (y > 0) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x - 1].decrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y - 1][x].decrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x + 1].decrementAndGet();
-                            }
-                        }
-                        if (y < reference.length - 1) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x - 1].decrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y + 1][x].decrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x + 1].decrementAndGet();
-                            }
-                        }
-                        if (x > 0) {
-                            MemorizingConcurrentLife.neighbors[1][y][x - 1].decrementAndGet();
-                        }
-                        if (x < reference[y].length - 1) {
-                            MemorizingConcurrentLife.neighbors[1][y][x + 1].decrementAndGet();
-                        }
+                        MemorizingConcurrentLife.takeNeighbor(y, x);
                     }
                 }
             }
