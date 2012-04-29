@@ -4,7 +4,6 @@
  */
 package hashlife;
 
-import concurrency.ArrayUpdatingUnit;
 import concurrency.MemorizingArrayUpdatingUnit;
 import java.io.File;
 import java.io.FileWriter;
@@ -59,9 +58,10 @@ public class MemorizingConcurrentLife {
                     num++;
                 }
                 neighbors[0][x][y] = new AtomicInteger(num);
+                neighbors[1][x][y] = new AtomicInteger(num);
             }
         }
-        
+        System.out.println("Neighbor array done'd!");
         // Bake 'n switch
         int threads = 16;
         for (int round = 0; round < job.getSteps(); round++) {
