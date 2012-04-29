@@ -5,6 +5,7 @@
 package concurrency;
 
 import hashlife.LifeFunctions;
+import hashlife.MemorizingLifeFunctions;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -28,7 +29,7 @@ public class MemorizingArrayUpdatingUnit implements Runnable {
     
     @Override
     public void run() {
-        LifeFunctions.updateArrays(reference, result, thisThread, threads);
+        MemorizingLifeFunctions.updateArrays(reference, result, thisThread, threads);
         latch.countDown();
     }
     
