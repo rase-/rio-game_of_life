@@ -33,68 +33,16 @@ public class MemorizingLifeFunctions {
         for (int y = range_start; y < range_stop; y++) {
             for (int x = 0; x < reference[y].length; x++) {
                 result[y][x] = nextAlive(reference, y, x);
+                
                 //Update the next neighbor table if state changed
                 if (result[y][x] != reference[y][x]) {
                     //NEW CELL IS BORN
                     if (result[y][x]) {
-                        if (y > 0) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x - 1].incrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y - 1][x].incrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x + 1].incrementAndGet();
-                            }
-                        }
-                        if (y < reference.length - 1) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x - 1].incrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y + 1][x].incrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x + 1].incrementAndGet();
-                            }
-                        }
-                        if (x > 0) {
-                            MemorizingConcurrentLife.neighbors[1][y][x - 1].incrementAndGet();
-                        }
-                        if (x < reference[y].length - 1) {
-                            MemorizingConcurrentLife.neighbors[1][y][x + 1].incrementAndGet();
-                        }
-                    } //Old cell is dead
+                        MemorizingConcurrentLife.addNeighbor(y, x);
+                    }
+                    //Cell is dead
                     else {
-                        if (y > 0) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x - 1].decrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y - 1][x].decrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y - 1][x + 1].decrementAndGet();
-                            }
-                        }
-                        if (y < reference.length - 1) {
-                            if (x > 0) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x - 1].decrementAndGet();
-                            }
-
-
-                            MemorizingConcurrentLife.neighbors[1][y + 1][x].decrementAndGet();
-                            if (x < reference[y].length - 1) {
-                                MemorizingConcurrentLife.neighbors[1][y + 1][x + 1].decrementAndGet();
-                            }
-                        }
-                        if (x > 0) {
-                            MemorizingConcurrentLife.neighbors[1][y][x - 1].decrementAndGet();
-                        }
-                        if (x < reference[y].length - 1) {
-                            MemorizingConcurrentLife.neighbors[1][y][x + 1].decrementAndGet();
-                        }
+                        MemorizingConcurrentLife.takeNeighbor(y, x);
                     }
                 }
             }
@@ -112,7 +60,6 @@ public class MemorizingLifeFunctions {
      * @return True if the cell should be alive on the next round, False if not.
      */
     private static boolean nextAlive(boolean[][] reference, int y, int x) {
-        System.out.println("Next alive called!");
 
         if (!reference[y][x]) {
             return (MemorizingConcurrentLife.neighbors[0][y][x].get() == 3);
